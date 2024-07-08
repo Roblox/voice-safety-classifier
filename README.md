@@ -1,7 +1,7 @@
 ## Model Description
 We present a large classification model trained on a manually curated real-world dataset that can be used as a new benchmark for advancing research in voice toxicity detection and classification.
 We started with the original weights from the [WavLM base plus](https://arxiv.org/abs/2110.13900) and fine-tuned it with 2,374 hours of voice chat audio clips for multilabel classification. The audio clips are automatically labeled using a synthetic data pipeline 
-described in [our blog post](link to blog post here). A single output can have multiple labels. 
+described in [our blog post]( https://research.roblox.com/tech-blog/2024/07/deploying-ml-for-voice-safety). A single output can have multiple labels. 
 The model outputs a n by 6 output tensor where the inferred labels are `Profanity`, `DatingAndSexting`, `Racist`, 
 `Bullying`, `Other`, `NoViolation`. `Other` consists of policy violation categories with low prevalence such as drugs 
 and alcohol or self-harm that are combined into a single category.
