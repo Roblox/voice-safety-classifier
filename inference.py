@@ -1,5 +1,3 @@
-# Copyright © 2024 Roblox Corporation
-
 """
 This file gives a sample demonstration of how to use the given functions in Python, for the Voice Safety Classifier model. 
 """
