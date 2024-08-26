@@ -5,7 +5,7 @@ This file gives a sample demonstration of how to use the given functions in Pyth
 """
 
 import torch
-import librosa
+
 import numpy as np
 import argparse
 from transformers import WavLMForSequenceClassification
