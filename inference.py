@@ -87,13 +87,14 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     labels_name_list = [
+        "Discrimination",
+        "Harassment",
+        "Sexual",
+        "IllegalAndRegulated",
+        "DatingAndRomantic",
         "Profanity",
-        "DatingAndSexting",
-        "Racist",
-        "Bullying",
-        "Other",
-        "NoViolation",
     ]
+
     # Model is trained on only 16kHz audio
     audio, _ = librosa.core.load(args.audio_file, sr=16000)
     input_np = feature_extract_simple(audio, sr=16000)
@@ -103,7 +104,7 @@ if __name__ == "__main__":
     )
     probs = infer(model, input_pt)
     probs = probs.reshape(-1, 6).detach().tolist()
-    print(f"Probabilities for {args.audio_file} is:")
+    print(f"Probabilities for {args.audio_file}:")
     for chunk_idx in range(len(probs)):
         print(f"\nSegment {chunk_idx}:")
         for label_idx, label in enumerate(labels_name_list):

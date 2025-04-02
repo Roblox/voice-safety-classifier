@@ -1,43 +1,55 @@
 ## Model Description
-We present a large classification model trained on a manually curated real-world dataset that can be used as a new benchmark for advancing research in voice toxicity detection and classification.
-We started with the original weights from the [WavLM base plus](https://arxiv.org/abs/2110.13900) and fine-tuned it with 2,374 hours of voice chat audio clips for multilabel classification. The audio clips are automatically labeled using a synthetic data pipeline 
-described in [our blog post](https://research.roblox.com/tech-blog/2024/06/deploying-ml-for-voice-safety). A single output can have multiple labels. 
-The model outputs a n by 6 output tensor where the inferred labels are `Profanity`, `DatingAndSexting`, `Racist`, 
-`Bullying`, `Other`, `NoViolation`. `Other` consists of policy violation categories with low prevalence such as drugs 
-and alcohol or self-harm that are combined into a single category.
+We present a voice-safety classification model that can be used for voice-toxicity detection and classification.
+The model has been distilled into the [WavLM](https://arxiv.org/abs/2110.13900) architecture from a larger teacher model.
+All the model training has been conducted with Roblox internal voice chat datasets,
+using both machine and human-labeled data, with over 100k hours of training data in total.
+We have also published a blog post about this work.
 
+The model supports eight languages: English, Spanish, German, French, Portuguese, Italian, Korean, and Japanese.
+It classifies the input audio into six toxicity classes in a multilabel fashion. The class labels are as follows:
+`Discrimination`, `Harassment`, `Sexual`, `IllegalAndRegulated`, `DatingAndRomantic`, and `Profanity`.
+Please refer to [Roblox Community Standards](https://en.help.roblox.com/hc/en-us/articles/203313410-Roblox-Community-Standards)
+for a detailed explanation on the policy, which has been used for labeling the datasets.
+The model outputs have been calibrated for the Roblox voice chat environment,
+so that the class scores after a sigmoid can be interpreted as probabilities.
 
-We evaluated this model on a data set with human annotated labels that contained a total of 9,795 samples with the class 
-distribution shown below. Note that we did not include the "other" category in this evaluation data set. 
+The classifier expects 16kHz audio segments as input. Ideal segment length is 15 seconds,
+but the classifier can operate on shorter segments as well. The prediction accuracy may degrade
+for longer segments.
 
-|Class|Number of examples| Duration (hours)|% of dataset| 
-|---|---|---|---|
-|Profanity | 4893| 15.38 | 49.95%|
-|DatingAndSexting | 688 | 2.52 | 7.02% |
-|Racist | 889 | 3.10 | 9.08% |
-|Bullying | 1256 | 4.25 | 12.82% |
-|NoViolation | 4185 | 9.93 | 42.73% |
+The table below displays evaluation precision and recall for each of the supported languages,
+as calculated over internal language-specific held-out datasets, which resemble the Roblox voice chat traffic.
+The operating thresholds for each of the categories were kept equal per language, and optimized
+to achieve a false positive rate of 1%. The classifier was then evaluated as a binary classifier,
+tagging the audio as positive if any of the heads exceeded the threshold.
 
+|Language|Precision|Recall|
+|---|---|---|
+|English   |63.9%|58.2%|
+|Spanish   |76.1%|63.2%|
+|German    |69.9%|74.1%|
+|French    |70.3%|69.8%|
+|Portuguese|85.4%|58.0%|
+|Italian   |86.6%|52.4%|
+|Korean    |78.0%|64.6%|
+|Japanese  |56.7%|57.7%|
 
-If we set the same threshold across all classes and treat the model as a binary classifier across all 4 toxicity classes
-(`Profanity`, `DatingAndSexting`, `Racist`, `Bullying`), we get a binarized average precision of 94.48%. The precision 
-recall curve is as shown below.
+Compared to the v1 voice safety classifier, the v2 model
+expands the support from English to 7 additional languages,
+as well as significantly improving the classification accuracy.
+With the 1% false positive rate as above, the binary recall for English is improved by 92%.
 
-
-<p align="center">
-<img src="images/human_eval_pr_curve.png" alt="PR Curve" width="500"/>
-</p>
 
 ## Usage
 The dependencies for the inference file can be installed as follows:
 ```
 pip install -r requirements.txt
 ```
-The inference file contains useful helper functions to preprocess the audio file for proper inference. 
-To run the inference file, please run the following command:
+The provided Python file demonstrates how to use the classifier with arbitrary 16kHz audio input.
+To run the inference, please run the following command:
 ```
 python inference.py --audio_file <your audio file path> --model_path <path to Huggingface model>
 ```
-You can get the model weights either by downloading from the model releases page [here](https://github.com/Roblox/voice-safety-classifier/releases/tag/vs-classifier-v1), or from HuggingFace under 
-[`roblox/voice-safety-classifier`](https://huggingface.co/Roblox/voice-safety-classifier). If `model_path` isn’t 
-specified, the model will be loaded directly from HuggingFace.
+You can download the model weights from the model releases page [here](https://github.com/Roblox/voice-safety-classifier/releases/tag/vs-classifier-v2),
+or from HuggingFace under [`roblox/voice-safety-classifier`](https://huggingface.co/Roblox/voice-safety-classifier).
+If `model_path` isn’t specified, the model will be loaded directly from HuggingFace.
