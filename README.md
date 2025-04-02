@@ -3,7 +3,7 @@ We present a voice-safety classification model that can be used for voice-toxici
 The model has been distilled into the [WavLM](https://arxiv.org/abs/2110.13900) architecture from a larger teacher model.
 All the model training has been conducted with Roblox internal voice chat datasets,
 using both machine and human-labeled data, with over 100k hours of training data in total.
-We have also published a blog post about this work.
+We have also published [a blog post](https://corp.roblox.com/newsroom/2025/04/updating-ml-voice-safety-more-languages) about this work.
 
 The model supports eight languages: English, Spanish, German, French, Portuguese, Italian, Korean, and Japanese.
 It classifies the input audio into six toxicity classes in a multilabel fashion. The class labels are as follows:
