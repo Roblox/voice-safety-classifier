@@ -1,7 +1,7 @@
 # Copyright © 2024 Roblox Corporation
 
 """
-This file gives a sample demonstration of how to use the given functions in Python, for the Voice Safety Classifier model. 
+This file gives a sample demonstration of how to use the given functions in Python, for the Voice Safety Classifier v2 model.
 """
 
 import torch
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--model_path",
         type=str,
-        default="roblox/voice-safety-classifier",
+        default="roblox/voice-safety-classifier-v2",
         help="checkpoint file of model",
     )
     args = parser.parse_args()
