@@ -51,5 +51,5 @@ To run the inference, please run the following command:
 python inference.py --audio_file <your audio file path> --model_path <path to Huggingface model>
 ```
 You can download the model weights from the model releases page [here](https://github.com/Roblox/voice-safety-classifier/releases/tag/vs-classifier-v2),
-or from HuggingFace under [`roblox/voice-safety-classifier`](https://huggingface.co/Roblox/voice-safety-classifier).
+or from HuggingFace under [`roblox/voice-safety-classifier-v2`](https://huggingface.co/Roblox/voice-safety-classifier-v2).
 If `model_path` isn’t specified, the model will be loaded directly from HuggingFace.
