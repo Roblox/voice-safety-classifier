@@ -1,3 +1,8 @@
+## This repository is no longer updated
+
+Please find the latest voice-safety-classifier models under [Roblox Corporation in Hugging Face](https://huggingface.co/Roblox).
+
+
 ## Model Description
 We present a voice-safety classification model that can be used for voice-toxicity detection and classification.
 The model has been distilled into the [WavLM](https://arxiv.org/abs/2110.13900) architecture from a larger teacher model.
